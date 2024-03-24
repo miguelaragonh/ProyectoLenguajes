@@ -1,0 +1,304 @@
+<app-nav-bar></app-nav-bar>
+<div class="container-fluid">
+  <div class="card mt-4">
+    <!--Card Header-->
+    <div class="card-header text-center" style="background-color: black; color: white">
+      <h3>Gestion de Productos</h3>
+    </div>
+    <!--FIN CARD HEADER-->
+    <div class="container-fluid" [@estadoFiltro]="stateFiltro">
+      <form class="mt-2 mb-2">
+        <div class="d-flex">
+          <input type="text" class="form-control me-2" placeholder="idProducto" #fIdProducto (keyup)="
+              onFiltrarChange({
+                idProducto: fIdProducto.value,
+                nombre: fNombre.value,
+                color : '',
+                precio: fPrecio.value,
+                talla: ftalla.value,
+                genero : '',
+              })
+            " />
+          <input type="text" class="form-control me-2" placeholder="Nombre Producto" #fNombre (keyup)="
+              onFiltrarChange({
+                idProducto: fIdProducto.value,
+                nombre: fNombre.value,
+                color : '',
+                precio: fPrecio.value,
+                talla: ftalla.value,
+                genero : '',
+              })
+            " />
+          <input type="text" class="form-control me-2" placeholder="Precio" #fPrecio (keyup)="
+              onFiltrarChange({
+                idProducto: fIdProducto.value,
+                nombre: fNombre.value,
+                color : '',
+                precio: fPrecio.value,
+                talla: ftalla.value,
+                genero : '',
+              })
+            " />
+          <input type="text" class="form-control me-2" placeholder="Talla" #ftalla (keyup)="
+              onFiltrarChange({
+                idProducto: fIdProducto.value,
+                nombre: fNombre.value,
+                color : '',
+                precio: fPrecio.value,
+                talla: ftalla.value,
+                genero : '',
+              })
+            " />
+        </div>
+      </form>
+    </div>
+    <!--CARD BODY-->
+    <div class="card-body mt-3">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover table-sm">
+          <thead class="text-center">
+            <tr>
+              <th scope="col">ID Producto</th>
+              <th scope="col">Producto</th>
+              <th scope="col">Color</th>
+              <th scope="col">Precio</th>
+              <th scope="col">Talla</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Genero</th>
+              <th scope="col" colspan="3" class="text-center">
+                <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#ventanaProducto"
+                  (click)="onNuevo()">
+                  <fa-icon [icon]="['fas', 'plus']"></fa-icon> Nuevo
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider text-center">
+            <tr *ngFor="let item of productos | paginate:{
+              itemsPerPage: itemsPag,
+              currentPage: pagActual,
+              totalItems: numRegs }">
+              <th scope="row" style="font-weight: lighter">
+                {{ item.idProducto }}
+              </th>
+              <td style="font-weight: bold">{{ item.nombreProducto }}</td>
+              <td>{{ item.color }}</td>
+              <td>{{ item.precio }}</td>
+              <td>{{ item.talla }}</td>
+              <td *ngIf="item.stock < 1" class="text-danger">
+                Producto Agotado
+              </td>
+              <td *ngIf="item.stock > 0">{{ item.stock }}</td>
+              <td>{{ item.genero }}</td>
+              <td class="text-center">
+                <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#ventanaProducto"
+                  (click)="onEditar(item.idProducto)">
+                  <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                </button>
+              </td>
+
+              <td class="text-center">
+                <button class="btn btn-danger btn-sm" (click)="onEliminar(item.idProducto, item.nombreProducto)">
+                  <fa-icon [icon]="['fas', 'trash-can']"></fa-icon>
+                </button>
+              </td>
+
+              <td class="text-center">
+                <button class="btn btn-info btn-sm" (click)="onInfo(item.idProducto)">
+                  <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="alert alert-primary text-center" *ngIf="productos === null">
+          No se encontraron datos
+        </div>
+      </div>
+    </div>
+    <!--FIN CARD BODY-->
+    <!--CARD FOOTER-->
+    <div class="card-footer d-flex justify-content-between pt-4">
+      <div class="me-2">
+        <select class="form-select form-select-sm" (change)="onCambioTam($event)">
+          <option *ngFor="let tama of paginas" [ngValue]="tama" [selected]="tama === itemsPag">
+            {{ tama }}
+          </option>
+        </select>
+      </div>
+
+      <pagination-controls class="my-pagination" (pageChange)="onCambioPag($event)" previousLabel="" nextLabel="">
+      </pagination-controls>
+      <div>
+        <div class="botones">
+          <button class="btn btn-warning btn-sm me-2" (click)="onFiltrar()">
+            <fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon> Filtrar
+          </button>
+          <button class="btn btn-info btn-sm me-2" (click)="onImprimir()">
+            <fa-icon [icon]="['fas', 'print']"> </fa-icon> Imprimir
+          </button>
+          <button class="btn btn-danger btn-sm me-2" (click)="onCerrar()">
+            <fa-icon [icon]="['fas', 'circle-xmark']"></fa-icon> Cerrar
+          </button>
+        </div>
+      </div>
+      <!--FIN CARD FOOTER-->
+    </div>
+  </div>
+  <!-- INICIO MODAL -->
+  <div class="modal fade" id="ventanaProducto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="ventanaProductoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="ventanaProductoLabel">
+            {{ titulo }}
+          </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="frmProductos" [formGroup]="frmProductos">
+            <div class="row mb-3">
+              <label for="idProducto" class="col-sm-3 col-form-label">Id
+                Producto</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="idProducto" formControlName="idProducto" />
+                <div class="alert alert-danger" *ngIf="F['idProducto'].invalid && F['idProducto'].touched">
+                  <div *ngIf="F['idProducto'].errors!['required']">
+                    Este campo es Obligatorio
+                  </div>
+                  <div *ngIf="F['idProducto'].errors!['minlength']">
+                    Debe ser al menos 1 digitos
+                  </div>
+                  <div *ngIf="F['idProducto'].errors!['pattern']">
+                    Este campo solo se admiten numeros
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="nombreProducto" class="col-sm-3 col-form-label">Producto</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="nombreProducto" formControlName="nombreProducto" />
+                <div class="alert alert-danger" *ngIf="F['nombreProducto'].invalid && F['nombreProducto'].touched">
+                  <div *ngIf="F['nombreProducto'].errors!['required']">
+                    Este campo es Obligatorio
+                  </div>
+                  <div *ngIf="F['nombreProducto'].errors!['minlength']">
+                    Debe tener al menos 4 caracteres
+                  </div>
+                  <div *ngIf="F['nombreProducto'].errors!['maxlength']">
+                    Debe tener maximo 30 caracteres
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="color" class="col-sm-3 col-form-label">Color</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="color" formControlName="color" />
+                <div class="alert alert-danger" *ngIf="F['color'].invalid && F['color'].touched">
+                  <div *ngIf="F['color'].errors!['required']">
+                    Este campo es Obligatorio
+                  </div>
+                  <div *ngIf="F['color'].errors!['minlength']">
+                    Debe tener al menos 3 caracteres
+                  </div>
+                  <div *ngIf="F['color'].errors!['maxlength']">
+                    Debe tener maximo 10 caracteres
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="precio" class="col-sm-3 col-form-label">Precio</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="precio" formControlName="precio" />
+                <div class="alert alert-danger" *ngIf="F['precio'].invalid && F['precio'].touched">
+                  <div *ngIf="F['precio'].errors!['required']">
+                    Este campo es Obligatorio
+                  </div>
+                  <div *ngIf="F['precio'].errors!['minlength']">
+                    Debe tener al menos 3 caracteres
+                  </div>
+                  <div *ngIf="F['precio'].errors!['maxlength']">
+                    Debe tener maximo 10 caracteres
+                  </div>
+                  <div *ngIf="F['precio'].errors!['pattern']">
+                    Este campo solo se admiten numeros
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="talla" class="col-sm-3 col-form-label">Talla</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="talla" formControlName="talla" />
+                <div class="alert alert-danger" *ngIf="F['talla'].invalid && F['talla'].touched">
+                  <div *ngIf="F['talla'].errors!['minlength']">
+                    Debe tener minimo 1 caracter
+                  </div>
+                  <div *ngIf="F['talla'].errors!['maxlength']">
+                    Debe tener maximo 4 caracter
+                  </div>
+                  <div *ngIf="F['talla'].errors!['required']">
+                    Este campo es Obligatorio
+                  </div>
+                  <div *ngIf="F['talla'].errors!['pattern']">
+                    Este campo solo se admiten numeros
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="stock" class="col-sm-3 col-form-label">Stock</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="stock" formControlName="stock" />
+                <div class="alert alert-danger" *ngIf="F['stock'].invalid && F['stock'].touched">
+                  <div *ngIf="F['stock'].errors!['minlength']">
+                    Debe tener minimo 1 caracter
+                  </div>
+                  <div *ngIf="F['stock'].errors!['required']">
+                    Este campo es Obligatorio
+                  </div>
+                  <div *ngIf="F['stock'].errors!['pattern']">
+                    Este campo solo se admiten numeros
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <label for="genero" class="col-sm-3 col-form-label">Genero</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="genero" formControlName="genero" />
+                <div class="alert alert-danger" *ngIf="F['genero'].invalid && F['genero'].touched">
+                  <div *ngIf="F['genero'].errors!['minlength']">
+                    Debe tener minimo 3 caracter
+                  </div>
+                  <div *ngIf="F['genero'].errors!['maxlength']">
+                    Debe tener maximo 15 caracter
+                  </div>
+                  <div *ngIf="F['genero'].errors!['required']">
+                    Este campo es Obligatorio
+                  </div>
+                  <div *ngIf="F['genero'].errors!['pattern']">
+                    Este campo solo se admiten letras
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary" form="frmProdcutos" [disabled]="frmProductos.invalid"
+            (click)="onSubmit()" data-bs-dismiss="modal">
+            Guardar
+          </button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

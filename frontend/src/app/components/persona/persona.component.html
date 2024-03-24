@@ -1,0 +1,496 @@
+<app-nav-bar></app-nav-bar>
+<div class="container-fluid">
+  <!--INICIO CARD-->
+  <div class="card">
+    <!--INICIO CARD HEAD-->
+    <div
+      class="card-header text-center"
+      style="background-color: black; color: #ffffff"
+    >
+      Gestion Personas
+    </div>
+    <!--FIN CARD HEAD-->
+ <div class="container-fluid" [@estadoFiltro]="stateFiltro">
+          <!--INICIO DE FORM FILTRO PERSONA-->
+          <form class="mt-2 mb-2">
+            <div class="d-flex">
+              <input
+                type="text"
+                class="form-control me-2"
+                placeholder="idPersona"
+                #fIdPersona
+                (keyup)="
+                  onFiltrarChange({
+                    idPersona: fIdPersona.value,
+                    nombre: fNombre.value,
+                    apellido1: fApellido1.value,
+                    apellido2: fApellido2.value
+                  })
+                "
+              />
+              <input
+                type="text"
+                class="form-control me-2"
+                placeholder="nombre"
+                #fNombre
+                (keyup)="
+                  onFiltrarChange({
+                    idPersona: fIdPersona.value,
+                    nombre: fNombre.value,
+                    apellido1: fApellido1.value,
+                    apellido2: fApellido2.value
+                  })
+                "
+              />
+              <input
+                type="text"
+                class="form-control me-2"
+                placeholder="apellido1"
+                #fApellido1
+                (keyup)="
+                  onFiltrarChange({
+                    idPersona: fIdPersona.value,
+                    nombre: fNombre.value,
+                    apellido1: fApellido1.value,
+                    apellido2: fApellido2.value
+                  })
+                "
+              />
+              <input
+                type="text"
+                class="form-control me-2"
+                placeholder="apellido2"
+                #fApellido2
+                (keyup)="
+                  onFiltrarChange({
+                    idPersona: fIdPersona.value,
+                    nombre: fNombre.value,
+                    apellido1: fApellido1.value,
+                    apellido2: fApellido2.value
+                  })
+                "
+              />
+            </div>
+          </form>
+          <!--FINAL DE FORM FILTRO PERSONA-->
+  </div>
+    <!--INICIO CARD BODY-->
+    <div
+      class="card-body mt-4"
+      style="background-color: rgb(255, 255, 255); color: #ffffff"
+    >
+      <div class="table-responsive">
+       
+        <!--INICIO TABLE-->
+        <table class="table table-striped table-hover table-sm">
+          <!--INICIO T-HEAD-->
+          <thead>
+            <tr>
+              <th scope="col">ID Persona</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Telefono</th>
+              <th scope="col">Celular</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Direccion</th>
+              <th scope="col">Rol</th>
+              <th scope="col" colspan="3" class="text-center">
+                <button
+                  class="btn btn-success btn-sm"
+                  (click)="onNuevo()"
+                  data-bs-toggle="modal"
+                  data-bs-target="#ventanaPersona"
+                >
+                  <fa-icon [icon]="['fas', 'plus']"></fa-icon> Nuevo
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <!--FIN T-HEAD-->
+
+          <!--INICIO T-BODY-->
+          <tbody class="table-group-divider">
+            <tr
+              *ngFor="
+                let item of personas| paginate:{
+                        itemsPerPage: itemsPPag,
+                        currentPage: pagActual,
+                        totalItems: numRegs }">
+
+              <th scope="row">{{ item.idPersona }}</th>
+              <td>
+                {{ item.nombre }} {{ item.apellido1 }} {{ item.apellido2 }}
+              </td>
+              <td>{{ item.telefono }}</td>
+              <td>{{ item.celular }}</td>
+              <td>{{ item.correo }}</td>
+              <td>{{ item.direccion }}</td>
+              <td>{{ item.idRol }}</td>
+
+              <td class="text-center">
+                <button
+                  class="btn btn-warning btn-sm"
+                  (click)="onEditar(item.idPersona)"
+                  data-bs-toggle="modal"
+                  data-bs-target="#ventanaPersona"
+                >
+                  <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                </button>
+              </td>
+
+              <td class="text-center">
+                <button
+                  class="btn btn-danger btn-sm"
+                  (click)="
+                    onEliminar(
+                      item.idPersona,
+                      item.nombre + ' ' + item.apellido1 + ' ' + item.apellido2
+                    )
+                  "
+                >
+                  <fa-icon [icon]="['fas', 'trash-can']"></fa-icon>
+                </button>
+              </td>
+
+              <td class="text-center">
+                <button
+                  class="btn btn-info btn-sm"
+                  (click)="onInfo(item.idPersona)"
+                >
+                  <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <!--FIN T-BODY-->
+        </table>
+        <!--FIN TABLE-->
+
+        <!--SI NO HAY REGISTROS-->
+        <div class="alert alert-primary text-center" *ngIf="personas === null">
+          No se encontraron datos
+        </div>
+        <!--SI NO HAY REGISTROS-->
+      </div>
+    </div>
+    <!--FIN CARD BODY-->
+
+    <!--INICIO CARD FOOTER-->
+    <div class="card-footer d-flex justify-content-between pt-4">
+      <div class="me-2">
+        <select
+          class="form-select form-select-sm"
+          (change)="onCambioTam($event)"
+        >
+          <option
+            *ngFor="let tama of paginas"
+            [ngValue]="tama"
+            [selected]="tama === itemsPPag"
+          >
+            {{ tama }}
+          </option>
+        </select>
+      </div>
+      
+      <pagination-controls class= "my-pagination" (pageChange)="onCambioPag($event)" previousLabel="5" nextLabel = "">
+      </pagination-controls>
+          <div>
+            <!--(pageChange)="onCambioPag($event)"
+              <nav aria-label="Page navigation example">
+                  <ul class="pagination pagination-sm">
+                    <li class="page-item">
+                      <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                      </a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                      <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+          </div>-->
+
+      <div class="botones">
+        <button class="btn btn-warning btn-sm me-2" (click)="onFiltrar()">
+          <fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon>Filtrar
+        </button>
+        <button class="btn btn-info btn-sm me-2" (click)="onImprimir()">
+          <fa-icon [icon]="['fas', 'print']"> </fa-icon>Imprimir
+        </button>
+        <button class="btn btn-danger btn-sm me-2" (click)="onCerrar()">
+          <fa-icon [icon]="['fas', 'circle-xmark']"></fa-icon> Cerrar
+        </button>
+      </div>
+    </div>
+    <!--FIN CARD FOOTER-->
+  </div>
+  <!--FIN CARD-->
+</div>
+
+<!-- FORM PERSONA MODAL-->
+
+<!-- INICIO MODAL -->
+<div
+  class="modal fade"
+  id="ventanaPersona"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="ventanaPersonaLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="ventanaPersonaLabel">{{ titulo }}</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="frmPersona" [formGroup]="frmPersona" (ngSubmit)="onSubmit()">
+          <div class="row mb-3">
+            <label for="idPersona" class="col-sm-3 col-form-label"
+              >Id Persona</label
+            >
+            <div class="col-sm-9">
+              <input
+                type="text"
+                class="form-control"
+                id="idPersona"
+                formControlName="idPersona"
+              />
+              <div
+                class="alert alert-danger"
+                *ngIf="F['idPersona'].invalid && F['idPersona'].touched"
+              >
+                <div *ngIf="F['idPersona'].errors!['required']">
+                  Este campo es Obligatorio
+                </div>
+                <div *ngIf="F['idPersona'].errors!['minlength']">
+                  Debe ser al menos 9 digitos
+                </div>
+                <div *ngIf="F['idPersona'].errors!['maxlength']">
+                  Debe ser como maximo 15 digitos
+                </div>
+                <div *ngIf="F['idPersona'].errors!['pattern']">
+                  Este campo solo se admiten numeros
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="nombre" class="col-sm-3 col-form-label">Nombre</label>
+            <div class="col-sm-9">
+              <input
+                type="text"
+                class="form-control"
+                id="nombre"
+                formControlName="nombre"
+              />
+              <div
+                class="alert alert-danger"
+                *ngIf="F['nombre'].invalid && F['nombre'].touched"
+              >
+                <div *ngIf="F['nombre'].errors!['required']">
+                  Este campo es Obligatorio
+                </div>
+                <div *ngIf="F['nombre'].errors!['minlength']">
+                  Debe tener al menos 3 caracteres
+                </div>
+                <div *ngIf="F['nombre'].errors!['maxlength']">
+                  Debe tener maximo 30 caracteres
+                </div>
+                <div *ngIf="F['nombre'].errors!['pattern']">
+                  Caracter invalido
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="apellido1" class="col-sm-3 col-form-label"
+              >Apellido 1</label
+            >
+            <div class="col-sm-9">
+              <input
+                type="text"
+                class="form-control"
+                id="apellido1"
+                formControlName="apellido1"
+              />
+              <div
+                class="alert alert-danger"
+                *ngIf="F['apellido1'].invalid && F['apellido1'].touched"
+              >
+                <div *ngIf="F['apellido1'].errors!['required']">
+                  Este campo es Obligatorio
+                </div>
+                <div *ngIf="F['apellido1'].errors!['minlength']">
+                  Debe tener al menos 2 caracteres
+                </div>
+                <div *ngIf="F['apellido1'].errors!['maxlength']">
+                  Debe tener maximo 15 caracteres
+                </div>
+                <div *ngIf="F['apellido1'].errors!['pattern']">
+                  Caracter invalido
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="apellido2" class="col-sm-3 col-form-label"
+              >Apellido 2</label
+            >
+            <div class="col-sm-9">
+              <input
+                type="text"
+                class="form-control"
+                id="apellido2"
+                formControlName="apellido2"
+              />
+              <div
+                class="alert alert-danger"
+                *ngIf="F['apellido2'].invalid && F['apellido2'].touched"
+              >
+                <div *ngIf="F['apellido2'].errors!['required']">
+                  Este campo es Obligatorio
+                </div>
+                <div *ngIf="F['apellido2'].errors!['minlength']">
+                  Debe tener al menos 2 caracteres
+                </div>
+                <div *ngIf="F['apellido2'].errors!['maxlength']">
+                  Debe tener maximo 15 caracteres
+                </div>
+                <div *ngIf="F['apellido2'].errors!['pattern']">
+                  Caracter invalido
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="telefono" class="col-sm-3 col-form-label"
+              >Telefono</label
+            >
+            <div class="col-sm-9">
+              <input
+                type="tel"
+                class="form-control"
+                id="telefono"
+                formControlName="telefono"
+              />
+              <div
+                class="alert alert-danger"
+                *ngIf="F['telefono'].invalid && F['telefono'].touched"
+              >
+                <div *ngIf="F['telefono'].errors!['required']">
+                  Este campo es Obligatorio
+                </div>
+                <div *ngIf="F['telefono'].errors!['pattern']">
+                  Formato invalido
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="celular" class="col-sm-3 col-form-label">Celular</label>
+            <div class="col-sm-9">
+              <input
+                type="tel"
+                class="form-control"
+                id="celular"
+                formControlName="celular"
+              />
+              <div
+                class="alert alert-danger"
+                *ngIf="F['celular'].invalid && F['celular'].touched"
+              >
+                <div *ngIf="F['celular'].errors!['pattern']">
+                  Formato invalido
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="correo" class="col-sm-3 col-form-label">Correo</label>
+            <div class="col-sm-9">
+              <input
+                type="email"
+                class="form-control"
+                id="correo"
+                formControlName="correo"
+              />
+              <div
+                class="alert alert-danger"
+                *ngIf="F['correo'].invalid && F['correo'].touched"
+              >
+                <div *ngIf="F['correo'].errors!['email']">Formato invalido</div>
+                <div *ngIf="F['correo'].errors!['required']">
+                  Este campo es Obligatorio
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-2">
+            <label for="idRol" class="col-sm-3 col-form-label">Id Rol</label>
+            <div class="col-sm-9">
+              <input
+                type="text"
+                class="form-control"
+                id="idRol"
+                formControlName="idRol"
+              />
+              <div
+                class="alert alert-danger"
+                *ngIf="F['idRol'].invalid && F['idRol'].touched"
+              >
+                <div *ngIf="F['idRol'].errors!['required']">
+                  Este campo es Obligatorio
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-floating">
+            <textarea
+              class="form-control"
+              placeholder="Direccion"
+              id="direccion"
+              style="height: 100px"
+              formControlName="direccion"
+            ></textarea>
+            <label for="direccion">Direccion</label>
+            <div
+              class="alert alert-danger"
+              *ngIf="F['direccion'].invalid && F['direccion'].touched"
+            >
+              <div *ngIf="F['direccion'].errors!['minlength']">
+                Debe tener al menos 5 caracteres
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          form="frmPersona"
+          [disabled]="frmPersona.invalid"
+          data-bs-dismiss="modal"
+        >
+          Guardar
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- FIN MODAL -->

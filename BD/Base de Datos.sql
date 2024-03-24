@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS tsneaker_bd;
+CREATE DATABASE tsneaker_bd;

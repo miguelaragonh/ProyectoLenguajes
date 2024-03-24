@@ -1,0 +1,16 @@
+.my-pagination ::ng-deep .ngx-pagination a{
+    text-decoration: none; 
+    background-color: white;
+    color: rgb(38, 68, 235);
+}
+.my-pagination ::ng-deep .ngx-pagination a:hover{
+    background-color: lightgray;
+}
+.my-pagination ::ng-deep .ngx-pagination li{
+    background-color: white;
+    margin: 0;
+    border: 1px solid lightgray;
+}
+.my-pagination ::ng-deep .ngx-pagination .current {
+    background: rgb(38, 68, 235);
+}

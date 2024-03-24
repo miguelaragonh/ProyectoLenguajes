@@ -1,0 +1,45 @@
+<app-nav-bar></app-nav-bar>
+<header class="bg-dark py-3 mb-3">
+  <div class="container px-1 px-lg-0 my-0">
+    <div class="text-center text-white">
+      <h3 class="display-2 fw-bolder">TSNEAKER</h3>
+      <p class="lead fw-normal text-white-50 mb-0">Shop with Style</p>
+    </div>
+  </div>
+</header>
+<section class="py-1">
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+      <div class="col mb-5" *ngFor="let items of productos">
+        <div class="card h-100 rounded-2">
+          <button class="nav-link" (click)="info(items.idProducto)"><fa-icon
+              [icon]="['fas', 'circle-info']"></fa-icon></button>
+          <img class="card-img-top text-center fw-bolder text-danger" alt="Card image cap"
+            src="../../../assets/productos/{{items.idProducto}}.jpg" />
+          <div class="card-body">
+            <div class="text-center">
+              <h5 class="fw-bolder">{{ items.nombreProducto }}</h5>
+              <h5 class="fw-bolder text-danger" *ngIf="items.stock <= 0">Producto Agotado</h5>
+              <p class="fw-normal" *ngIf="items.stock > 0">Precio: ₡{{items.precio}}</p>
+              <p class="fw-bold" *ngIf="items.stock > 0">Precio con IVA incluido</p>
+            </div>
+          </div>
+          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent" *ngIf="items.stock > 0">
+            <div class="text-center" *ngIf="rol == 2">
+              <a class="btn btn-dark mt-auto" (click)="cargarMemoria(items.idProducto,items.precio)">Agregar Al
+                Carrito</a>
+            </div>
+            <div class="text-center" *ngIf="rol == 1">
+              <a class="btn btn-primary" (click)="Admin()"><fa-icon [icon]="['fas', 'info-circle']"></fa-icon> Modo Administrador</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="text-center bg-outline-dark">
+    <p class="fw-bold">Derechos Reservados 2023</p>
+  </div>
+</footer>

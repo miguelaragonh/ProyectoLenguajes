@@ -1,0 +1,156 @@
+<div class="container-sm mt-7" >
+    
+
+    <!-- Section: Design Block -->
+    <section class="text-center">
+        <!-- Background image -->
+        <div class="p-2 bg-image" style="
+              background-image: url('../../../assets/img/registrofoto.jpg');
+              height: 200px;
+              ">
+    
+       
+    </div>
+        <!-- Background image -->
+      
+        <div class="card mx-4 mx-md-5 shadow-5-strong d-sm-flex" style="
+              margin-top: -100px;
+              background: hsla(0, 0%, 100%, 0.8);
+              backdrop-filter: blur(20px);
+              ">
+          <div class="card-body py-5 px-md-5" >
+      
+            <div class="row d-flex justify-content-center " >
+              <div class="col-lg-8">
+                <h2 class="fw-bold mb-5">Registro Usuario</h2>
+                <form id="frmPersona" [formGroup]="frmRegister" (ngSubmit)="onSubmit();">
+                  <!-- 2 column grid layout with text inputs for the first and last names -->
+    
+                  
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="form-floating mb-3">
+                        <input type="text"  id="idPersona" formControlName="idPersona" class="form-control" />
+                        <div class="alert alert-danger" *ngIf="F['idPersona'].invalid && F['idPersona'].touched">
+                          <div *ngIf="F['idPersona'].errors!['required']">Este campo es Obligatorio</div> 
+                          <div *ngIf="F['idPersona'].errors!['minlength']">Debe ser al menos 9 digitos</div> 
+                          <div *ngIf="F['idPersona'].errors!['maxlength']">Debe ser como maximo 15 digitos</div> 
+                          <div *ngIf="F['idPersona'].errors!['pattern']">Este campo solo se admiten numeros</div> 
+                         </div>
+                        <label class="form-label" for="form3Example1">Cedula</label>
+                      </div>
+                    </div>
+    
+                    <div class="col-md-6 mb-4">
+                      <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="nombre" formControlName="nombre">
+                        <div class="alert alert-danger" *ngIf="F['nombre'].invalid && F['nombre'].touched">
+                          <div *ngIf="F['nombre'].errors!['required']">Este campo es Obligatorio</div> 
+                          <div *ngIf="F['nombre'].errors!['minlength']">Debe tener al menos 3 caracteres</div> 
+                          <div *ngIf="F['nombre'].errors!['maxlength']">Debe tener maximo 30 caracteres</div> 
+                          <div *ngIf="F['nombre'].errors!['pattern']">Caracter invalido</div> 
+                         </div>
+                        <label class="form-label" for="form3Example1">Nombre</label>
+                      </div>
+                    </div>
+    
+                    <div class="col-md-6 mb-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="apellido1" formControlName="apellido1">
+                          <div class="alert alert-danger" *ngIf="F['apellido1'].invalid && F['apellido1'].touched">
+                              <div *ngIf="F['apellido1'].errors!['required']">Este campo es Obligatorio</div> 
+                              <div *ngIf="F['apellido1'].errors!['minlength']">Debe tener al menos 2 caracteres</div> 
+                              <div *ngIf="F['apellido1'].errors!['maxlength']">Debe tener maximo 15 caracteres</div> 
+                              <div *ngIf="F['apellido1'].errors!['pattern']">Caracter invalido</div> 
+                          </div>
+                          <label class="form-label" for="form3Example1">Apellido 1</label>
+                        </div>
+                      </div>
+    
+                      <div class="col-md-6 mb-4">
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" id="apellido2" formControlName="apellido2">
+                     <div class="alert alert-danger" *ngIf="F['apellido2'].invalid && F['apellido2'].touched">
+                            <div *ngIf="F['apellido2'].errors!['required']">Este campo es Obligatorio</div> 
+                            <div *ngIf="F['apellido2'].errors!['minlength']">Debe tener al menos 2 caracteres</div> 
+                            <div *ngIf="F['apellido2'].errors!['maxlength']">Debe tener maximo 15 caracteres</div> 
+                            <div *ngIf="F['apellido2'].errors!['pattern']">Caracter invalido</div> 
+                   </div>
+                          <label class="form-label" for="form3Example1">Apellido 2</label>
+                        </div>
+                      </div>
+    
+                      <div class="col-md-6 mb-4">
+                        <div class="form-floating mb-3">
+                          <input type="tel" class="form-control" id="telefono" formControlName="telefono">
+                      <div class="alert alert-danger" *ngIf="F['telefono'].invalid && F['telefono'].touched">
+                          <div *ngIf="F['telefono'].errors!['required']">Este campo es Obligatorio</div> 
+                          <div *ngIf="F['telefono'].errors!['pattern']">Formato invalido</div> 
+                      </div>
+                          <label class="form-label" for="form3Example1">Telefono</label>
+                        </div>
+                      </div>
+    
+                      <div class="col-md-6 mb-4">
+                        <div class="form-floating mb-3">
+                          <input type="tel" class="form-control" id="celular" formControlName="celular">
+                <div class="alert alert-danger" *ngIf="F['celular'].invalid && F['celular'].touched">
+                  <div *ngIf="F['celular'].errors!['pattern']">Formato invalido</div> 
+                  <div *ngIf="F['celular'].errors!['required']">Este campo es Obligatorio</div> 
+                 </div>
+                          <label class="form-label" for="form3Example1">Celular</label>
+                        </div>
+                      </div>
+    
+                      <div class="col-md-6 mb-4">
+                        <div class="form-floating mb-3">
+                          <input type="email" class="form-control" id="correo" formControlName="correo">
+                          <div class="alert alert-danger" *ngIf="F['correo'].invalid && F['correo'].touched">
+                            <div *ngIf="F['correo'].errors!['email']">Formato invalido</div> 
+                            <div *ngIf="F['correo'].errors!['required']">Este campo es Obligatorio</div> 
+                           </div>
+                          <label class="form-label" for="form3Example1">Correo</label>
+                        </div>
+                      </div>
+    
+                      <!---->
+                        <div class="col-md-6 mb-4">
+                        <div class="form-floating mb-3">
+                          <input type="password" class="form-control" id="passwI" formControlName="passwI">
+                          <div class="alert alert-danger" *ngIf="F['passwI'].invalid && F['passwI'].touched">
+                            <div *ngIf="F['passwI'].errors!['required']">Este campo es Obligatorio</div> 
+                           </div>
+                          <label class="form-label" for="form3Example1">Contraseña</label>
+                        </div>
+                      </div>
+    
+                  </div>
+      
+                  
+                    <div class="form-floating mb-3">
+                      <textarea class="form-control" placeholder="Direccion" id="direccion" style="height: 100px" formControlName="direccion"></textarea>
+              
+              <div class="alert alert-danger" *ngIf="F['direccion'].invalid && F['direccion'].touched">
+                <div *ngIf="F['direccion'].errors!['minlength']">Debe tener al menos 5 caracteres</div> 
+               </div>
+                      <label class="form-label" for="direccion">Direccion</label>
+                    </div>
+    
+                  <!-- Submit button -->
+                  <button type="submit" class="btn btn-primary btn-block mb-4" form="frmPersona" [disabled]="frmRegister.invalid">
+                    Registrarme
+                  </button>
+                  
+                  <div class="form-group mt-2 mb-0 row">
+                    <div class="col-12 mt-3 text-center">
+                        <a [routerLink]="['']" class="text-muted">Ya tienes una cuenta?</a>
+                    </div>
+                </div>
+            
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
+    </div>

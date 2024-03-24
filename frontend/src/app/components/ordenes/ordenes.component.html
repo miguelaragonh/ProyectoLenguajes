@@ -1,0 +1,262 @@
+<app-nav-bar></app-nav-bar>
+<div class="container-fluid">
+  <div class="card mt-4">
+    <!--Card Header-->
+    <div class="card-header text-center" style="background-color: black; color: white">
+      <h3>Historal De Compras</h3>
+    </div>
+    <!--FIN CARD HEADER-->
+    <div class="container-fluid" [@estadoFiltro]="stateFiltro">
+      <!--INICIO DE FORM FILTRO Orden-->
+      <form class="mt-2 mb-2">
+        <div class="d-flex">
+          <input type="text" class="form-control me-2" placeholder="ID Factura" #fIdFactura (keyup)="
+              onFiltrarChange({
+                idCompra: '',
+                idUsuario: fIdPersona.value,
+                idProducto: fIdProducto.value,
+                detalle: '',
+                montoTotal: fMontoTotal.value,
+                fechaCreacion: fFechaC.value,
+                idFactura: fIdFactura.value,
+              })
+            " />
+          <input type="text" class="form-control me-2" placeholder="ID Persona" #fIdPersona (keyup)="
+              onFiltrarChange({
+                idCompra: '',
+                idUsuario: fIdPersona.value,
+                idProducto: fIdProducto.value,
+                detalle: '',
+                montoTotal: fMontoTotal.value,
+                fechaCreacion: fFechaC.value,
+                idFactura: fIdFactura.value,
+              })
+            " />
+          <input type="text" class="form-control me-2" placeholder="ID Producto" #fIdProducto (keyup)="
+              onFiltrarChange({
+                idCompra: '',
+                idUsuario: fIdPersona.value,
+                idProducto: fIdProducto.value,
+                detalle: '',
+                montoTotal: fMontoTotal.value,
+                fechaCreacion: fFechaC.value,
+                idFactura: fIdFactura.value,
+              })
+            " />
+          <input type="text" class="form-control me-2" placeholder="Monto Total" #fMontoTotal (keyup)="
+              onFiltrarChange({
+                idCompra: '',
+                idUsuario: fIdPersona.value,
+                idProducto: fIdProducto.value,
+                detalle: '',
+                montoTotal: fMontoTotal.value,
+                fechaCreacion: fFechaC.value,
+                idFactura: fIdFactura.value,
+              })
+            " />
+          <input type="text" class="form-control me-2" placeholder="2023-01-01" #fFechaC (keyup)="
+              onFiltrarChange({
+                idCompra: '',
+                idUsuario: fIdPersona.value,
+                idProducto: fIdProducto.value,
+                detalle: '',
+                montoTotal: fMontoTotal.value,
+                fechaCreacion: fFechaC.value,
+                idFactura: fIdFactura.value,
+              })
+            " />
+        </div>
+      </form>
+      <!--FINAL DE FORM FILTRO Orden-->
+    </div>
+    <!--CARD BODY-->
+    <div *ngIf="rol==2" class="text-danger mt-2 ms-2 text-center fw-bold">
+      <p>Las opciones de Eliminar o Editar son exclusivas del Administrador</p>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped table-sm">
+          <!--INICIO T-HEAD-->
+          <thead class="text-center">
+            <tr>
+              <th scope="col">Id Factura</th>
+              <th scope="col">ID Usuario</th>
+              <th scope="col">ID Producto</th>
+              <th scope="col">Detalle</th>
+              <th scope="col">Monto Total</th>
+              <th scope="col">Fecha Creacion</th>
+            </tr>
+          </thead>
+          <!--FIN T-HEAD-->
+
+          <!--INICIO T-BODY-->
+          <tbody class="table-group-divider">
+            <tr *ngFor="
+            let item of ordenes| paginate:{
+              itemsPerPage: itemsPPag,
+              currentPage: pagActual,
+              totalItems: numRegs }" class="text-center">
+
+              <td>{{ item.idFactura }}</td>
+              <td>{{ item.idUsuario}}</td>
+              <td>{{ item.idProducto }}</td>
+              <td>{{ item.detalle }}</td>
+              <td>{{ item.montoTotal }}</td>
+              <td>{{ item.fechaCreacion }}</td>
+
+              <td class="text-center" *ngIf="rol == 1">
+                <button class="btn btn-warning btn-sm" (click)="onEditar(item.idCompra)" data-bs-toggle="modal"
+                  data-bs-target="#ventanaOrden">
+                  <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
+                </button>
+              </td>
+
+              <td class="text-center" *ngIf="rol == 1">
+                <button  class="btn btn-danger btn-sm" (click)="
+                    onEliminar(
+                      item.idCompra
+                    )
+                  ">
+                  <fa-icon [icon]="['fas', 'trash-can']"></fa-icon>
+                </button>
+              </td>
+
+              <td class="text-center">
+                <button class="btn btn-info btn-sm" (click)="onInfo(item.idCompra)">
+                  <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <!--FIN T-BODY-->
+        </table>
+        <!--FIN TABLE-->
+      </div>
+    </div>
+    <!--FIN CARD BODY-->
+
+    <!--CARD FOOTER-->
+    <div class="card-footer d-flex justify-content-between pt-4">
+      <div class="me-2">
+        <select class="form-select form-select-sm" (change)="onCambioTam($event)" style="width: fit-content;">
+          <option *ngFor="let tama of paginas" [ngValue]="tama" [selected]="tama === itemsPPag">
+            {{tama}}
+          </option>
+        </select>
+      </div>
+      <pagination-controls class="my-pagination" (pageChange)="onCambioPag($event)" previousLabel="" nextLabel=""
+        style="color: black">
+      </pagination-controls>
+      <div>
+        <div class="botones">
+          <button class="btn btn-warning btn-sm me-2" (click)="onFiltrar()">
+            <fa-icon [icon]="['fas', 'magnifying-glass']"></fa-icon> Filtrar
+          </button>
+          <button class="btn btn-info btn-sm me-2" (click)="onImprimir()">
+            <fa-icon [icon]="['fas', 'print']"> </fa-icon> Imprimir
+          </button>
+          <button class="btn btn-danger btn-sm me-2" (click)="onCerrar()">
+            <fa-icon [icon]="['fas', 'circle-xmark']"></fa-icon> Cerrar
+          </button>
+        </div>
+      </div>
+      <!--FIN CARD FOOTER-->
+      <!-- INICIO MODAL -->
+      <div class="modal fade" id="ventanaOrden" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="ventanaOrdenLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="ventanaOrdenLabel">{{ titulo }}</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form id="frmOrdenes" [formGroup]="frmOrdenes" (ngSubmit)="onSubmit()">
+                <div class="row mb-3">
+                  <label for="idCompra" class="col-sm-3 col-form-label">ID Compra</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="idCompra" formControlName="idCompra" />
+                    <div class="alert alert-danger" *ngIf="F['idCompra'].invalid && F['idCompra'].touched">
+                      <div *ngIf="F['idCompra'].errors!['required']">
+                        Este campo es Obligatorio
+                      </div>
+                      <div *ngIf="F['idCompra'].errors!['pattern']">
+                        Este campo solo se admiten numeros
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="idUsuario" class="col-sm-3 col-form-label">ID Usuario</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="idUsuario" formControlName="idUsuario" />
+                    <div class="alert alert-danger" *ngIf="F['idUsuario'].invalid && F['idUsuario'].touched">
+                      <div *ngIf="F['idUsuario'].errors!['required']">
+                        Este campo es Obligatorio
+                      </div>
+                      <div *ngIf="F['idUsuario'].errors!['pattern']">
+                        Este campo solo se admiten numeros
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="idProducto" class="col-sm-3 col-form-label">ID Producto</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="idProducto" formControlName="idProducto" />
+                    <div class="alert alert-danger" *ngIf="F['idProducto'].invalid && F['idProducto'].touched">
+                      <div *ngIf="F['idProducto'].errors!['required']">
+                        Este campo es Obligatorio
+                      </div>
+                      <div *ngIf="F['idProducto'].errors!['pattern']">
+                        Este campo solo se admiten numeros
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-2">
+                  <label for="detalle" class="col-sm-3 col-form-label">Detalle</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="detalle" formControlName="detalle" />
+                    <div class="alert alert-danger" *ngIf="F['detalle'].invalid && F['detalle'].touched">
+                      <div *ngIf="F['detalle'].errors!['required']">
+                        Este campo es Obligatorio
+                      </div>
+                      <div *ngIf="F['detalle'].errors!['minlength']">
+                        Debe tener al menos 2 caracteres
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="montoTotal" class="col-sm-3 col-form-label">Monto Total</label>
+                  <div class="col-sm-9">
+                    <input type="text" class="form-control" id="montoTotal" formControlName="montoTotal" />
+                    <div class="alert alert-danger" *ngIf="F['montoTotal'].invalid && F['montoTotal'].touched">
+                      <div *ngIf="F['montoTotal'].errors!['required']">
+                        Este campo es Obligatorio
+                      </div>
+                      <div *ngIf="F['montoTotal'].errors!['pattern']">
+                        Este campo solo se admiten numeros
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-primary" form="frmOrdenes" [disabled]="frmOrdenes.invalid"
+                data-bs-dismiss="modal">
+                Guardar
+              </button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Cerrar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FIN MODAL -->
+
+    </div>
+  </div>
