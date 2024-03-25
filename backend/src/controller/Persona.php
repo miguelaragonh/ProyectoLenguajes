@@ -12,9 +12,10 @@ class Persona extends AccesoBD{
 
     public function crear(Request $request, Response $response, $args){
         $body=json_decode($request->getBody()); 
+      
         $body -> passwI =
         password_hash($body -> passwI, PASSWORD_BCRYPT,['cost' => 10]);
-        //unset($body->passwI);
+        //unset($body->passwI); 
         $res = $this -> crearUsrBD($body, self::RECURSO, $body->idRol,self::ID);
         $status = match($res){
             '0'=> 201,

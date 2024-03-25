@@ -33,22 +33,28 @@ class AccesoBD{
         return $res[0];
     }
     public function crearUsrBD($datos,$recurso,$rol,$campoId){
+        
         $passw = $datos -> passwI;
         unset($datos->passwI);//deshacer password o excluir el dato
+        //var_dump($datos);
         $params = $this ->generarParam($datos);
         $con = $this -> container->get('bd');
         $con -> beginTransaction();//inicie la transacción
 
         try {
         $sql = "SELECT nuevo$recurso$params";
+
         $query = $con->prepare($sql);
         $d = [];
         foreach ($datos as $clave => $valor) $d[$clave] = filter_var($valor,FILTER_SANITIZE_SPECIAL_CHARS);
         $query ->execute($d);  
         $res = $query->fetch(PDO::FETCH_NUM)[0];
+
         //crear usuario
         $sql = "SELECT nuevoUsuario(:idUsuario,:idRol,:passw);";
         $query = $con->prepare($sql);
+      
+
         $query ->execute(array(
             'idUsuario' => $d[$campoId],
             'idRol' => $rol,
@@ -62,7 +68,7 @@ class AccesoBD{
         }
         $query = null;
         $con=null;
-        return $res[0];
+        return $res;
     } 
     public function numRegsBD($datos , $recurso){
         $cadena="";

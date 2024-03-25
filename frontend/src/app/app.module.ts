@@ -15,7 +15,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { FeedComponent } from './components/feed/feed.component';
-import { Error403Component } from './components/error403/error403.component'; 
+import { Error403Component } from './components/error403/error403.component';
 import { JwtInterceptor } from './shared/helpers/jwt.interceptor';
 import { RefreshTokenInterceptor } from './shared/helpers/refresh-token.interceptor';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -23,6 +23,7 @@ import { ProductosComponent } from './components/productos/productos.component';
 import { OrdenesComponent } from './components/ordenes/ordenes.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { LoaderInterceptor } from './shared/helpers/loader.interceptor';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { LoaderInterceptor } from './shared/helpers/loader.interceptor';
     Error403Component,
     ProductosComponent,
     OrdenesComponent,
-    LoaderComponent
+    LoaderComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -52,11 +54,11 @@ import { LoaderInterceptor } from './shared/helpers/loader.interceptor';
     {provide:HTTP_INTERCEPTORS,useClass:JwtInterceptor,multi:true},
     {provide:HTTP_INTERCEPTORS,useClass:RefreshTokenInterceptor,multi:true},
     {provide:HTTP_INTERCEPTORS,useClass:LoaderInterceptor,multi:true},
-  
+
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { 
+export class AppModule {
 //aqui va todo lo que queremos exportar para otros componentes
 constructor(lib:FaIconLibrary){
 lib.addIconPacks(fas);

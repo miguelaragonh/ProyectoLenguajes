@@ -24,7 +24,7 @@ class Sesion extends AccesoBD{
         $payload= [
             'iss' => $_SERVER['SERVER_NAME'],
             'iat' => time(),
-            'exp'=> time()+150000,
+            //'exp'=> time()+150000,
             'sub' => $idUsuario,
             'idRol' => $idRol,
             'nom' => $nombre

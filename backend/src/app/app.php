@@ -14,13 +14,13 @@ $container = $app->getContainer();
 include_once 'config_bd.php';
 
 
-/*$app->add(new Tuupola\Middleware\JwtAuthentication([
+$app->add(new Tuupola\Middleware\JwtAuthentication([
     "secure" => false,// si se esta usando una conexion segura
-    //"path" => ["/persona"],//aqui va todo lo que queremos proteger o asegurar
+    "path" => ["/persona",],//aqui va todo lo que queremos proteger o asegurar
     "ignore" => ["/sesion/iniciar","/usuario","/producto"],// lo que no queremos proteger o asegurar
     "secret" => $container ->get('clave'),
     "algorithm" => ["HS256", "HS384"] // algoritmo que se usara en el jwt
-]));*/
+]));
 
 //incluir archivo de congif
 
